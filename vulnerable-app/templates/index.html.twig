@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <form method="post" action="{{ path('app_comments_savecomment') }}">
+                <div class="form-group">
+                    <textarea class="form-control" id="comment-field" name="contents" required placeholder="Enter your comment..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Comment</button>
+            </form>
+
+            <h2 class="mt-4">Comments</h2>
+
+            {% for comment in comments %}
+                {% include 'comment.html.twig' %}
+            {% else %}
+                <div>No comments yet ;(</div>
+            {% endfor %}
+        </div>
+    </div>
+    {% include 'login.html.twig' %}
+{% endblock %}

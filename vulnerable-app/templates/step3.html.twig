@@ -1,0 +1,4 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="alert alert-success">Order was sent to: {{ form.address }}. {% if form.vipDiscount %}VIP discount was applied.{% endif %}</div>
+{% endblock %}

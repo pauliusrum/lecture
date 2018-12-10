@@ -1,0 +1,23 @@
+security:
+    encoders:
+        App\Entity\User: plaintext
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            logout:
+                path:   /logout
+                target: /
+            guard:
+                authenticators:
+                    - App\Security\Authenticator
+    access_control:
+         - { path: ^/multi-step, roles: ROLE_USER }
+         - { path: ^/file-upload, roles: ROLE_USER }

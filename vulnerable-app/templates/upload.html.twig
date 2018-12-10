@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="file">Choose a picture..</label>
+                    <input type="file" class="form-control-file" id="file" name="picture">
+                    <button type="submit" class="mt-4 btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

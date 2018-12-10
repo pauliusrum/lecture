@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+console="php ${dir}/bin/console"
+
+cd ${dir}
+composer install
+${console} doctrine:migrations:migrate -n
+${console} doctrine:fixtures:load -n --env=dev

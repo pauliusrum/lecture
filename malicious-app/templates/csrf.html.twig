@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <form target="_blank" method="post" action="http://127.0.0.1:8080/save-comment">
+                <div class="form-group">
+                    <textarea class="form-control" id="comment-field" name="contents" required="" placeholder="Enter your comment..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Comment</button>
+            </form>
+
+            <h2 class="mt-4">Comments</h2>
+            <div>Your comment will definitely appear on this site ;)</div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <form method="post" action="{{ path('app_multistepform_step1') }}">
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input class="form-control" id="address" name="address">
+        </div>
+        <div class="form-check">
+            <input type="hidden" name="vipDiscount" value="0">
+            <input type="checkbox" class="form-check-input" id="vipDiscount" name="vipDiscount" {% if is_granted('ROLE_VIP') == false %} disabled value="0"{% endif %}>
+            <label class="form-check-label" for="vipDiscount">Use VIP user discounts</label>
+        </div>
+        <button type="submit" class="mt-4 btn btn-primary">Next</button>
+    </form>
+{% endblock %}

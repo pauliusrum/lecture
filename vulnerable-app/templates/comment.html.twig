@@ -1,0 +1,21 @@
+{% if comment %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">{% if comment.user %} {{ comment.user.username }} {% else %} Anonymous {% endif %} @ {{ comment.createdAt|date("Y-m-d H:i") }}</h6>
+            <div class="card-text">{{ comment.contents }}</div>
+        </div>
+    </div>
+    {% if is_granted('ROLE_ADMIN') or (app.user and app.user == comment.user) %}
+        <div class="mt-2">
+            <a href="{{ path('app_comments_editcomment', { 'id': comment.id }) }}" class="btn btn-outline-primary">Edit</a>
+            <form class="d-inline" action="{{ path('app_comments_removecomment') }}" method="post">
+                <input type="hidden" value="{{ comment.id }}" name="id">
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+            </form>
+        </div>
+    {% endif %}
+{% else %}
+    <div class="row justify-content-center">
+        Comment not found
+    </div>
+{% endif %}

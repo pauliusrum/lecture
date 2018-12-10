@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row justify-content-center mb-4">Summary blah blah blah</div>
+    <div class="row justify-content-center">Send to: {{ form.address }}</div>
+    <div class="row justify-content-center">Apply VIP discounts: {% if form.vipDiscount %}Yes{% else %}No{% endif %}</div>
+
+    <div class="row justify-content-center">
+        <form method="post" action="{{ path('app_multistepform_step2') }}">
+            <button type="submit" class="mt-4 btn btn-primary">Confirm</button>
+        </form>
+    </div>
+{% endblock %}

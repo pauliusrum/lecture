@@ -89,11 +89,11 @@ class CommentsController extends AbstractController
      */
     public function saveComment(Request $request): Response
     {
-        try {
-            $user = $this->sessionManager->getUser();
-            $userId = $user ? $user->getId() : null;
-            $contents = $request->request->get('contents');
+        $user = $this->sessionManager->getUser();
+        $userId = $user ? $user->getId() : null;
+        $contents = $request->request->get('contents');
 
+        try {
             $this->commentRepository->save($userId, $contents);
             $this->session->getFlashBag()->add('success', 'Added.');
         } catch (Throwable $e) {

@@ -31,14 +31,11 @@ class CommentRepository extends ServiceEntityRepository
 
     public function save(?int $userId, string $contents): void
     {
-        $em = $this->getEntityManager();
-        $em->getConnection()->transactional(static function () use ($em, $userId, $contents) {
-            $createdAt = (new DateTimeImmutable())->format('Y-m-d H:i:s');
-            $userId = $userId ?: 'null';
+        $createdAt = (new DateTimeImmutable())->format('Y-m-d H:i:s');
+        $userIdParam = $userId ?: 'null';
 
-            $query = $em->getConnection()->prepare("INSERT INTO comment (contents, user_id, created_at) VALUES ('$contents', $userId, '$createdAt')");
-            $query->execute();
-        });
+        $query = $this->getEntityManager()->getConnection()->prepare("INSERT INTO comment (contents, user_id, created_at) VALUES ('$contents', $userIdParam, '$createdAt')");
+        $query->execute();
     }
 
     public function remove(int $id): void

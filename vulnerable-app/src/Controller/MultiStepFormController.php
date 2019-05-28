@@ -4,22 +4,37 @@ namespace App\Controller;
 
 use App\Data\MultiStepForm;
 use App\Session\SessionManager;
+use App\Validator\MultiStepFormValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MultiStepFormController extends AbstractController
 {
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
      * @var SessionManager
      */
     private $sessionManager;
 
-    public function __construct(SessionManager $sessionManager)
+    /**
+     * @var MultiStepFormValidator
+     */
+    private $validator;
+
+    public function __construct(SessionInterface $session, SessionManager $sessionManager, MultiStepFormValidator $validator)
     {
+        $this->session = $session;
         $this->sessionManager = $sessionManager;
+        $this->validator = $validator;
     }
 
     /**
@@ -33,12 +48,19 @@ class MultiStepFormController extends AbstractController
         $address = $request->request->get('address');
         $form = new MultiStepForm($vipDiscount, $address);
 
-        $this->validate($form);
+        $errors = $this->validator->validate($this->sessionManager->getUser(), $form);
+        if (count($errors)) {
+            foreach ($errors as $error) {
+                $this->session->getFlashBag()->add('danger', $error);
+            }
 
-        $response = $this->redirect($this->generateUrl('app_multistepform_step2'));
-        $response->headers->setCookie(new Cookie('multi-step', serialize($form), 0, '/', null, false, false));
+            return $this->render('step1.html.twig');
+        } else {
+            $response = $this->redirect($this->generateUrl('app_multistepform_step2'));
+            $response->headers->setCookie(new Cookie('multi-step', serialize($form), 0, '/', null, false, false));
 
-        return $response;
+            return $response;
+        }
     }
 
     /**
@@ -71,16 +93,6 @@ class MultiStepFormController extends AbstractController
         $response->headers->clearCookie('multi-step');
 
         return $response;
-    }
-
-    private function validate(MultiStepForm $form): void
-    {
-        if ($form->isVipDiscount()) {
-            $user = $this->sessionManager->getUser();
-            $roles = $user ? $user->getRoles() : [];
-
-            if ($user && !in_array('ROLE_VIP', $roles, true)) throw new RuntimeException('Only VIP users can apply for discounts.');
-        }
     }
 
     private function deserializeMultiStepForm(Request $request): ?MultiStepForm

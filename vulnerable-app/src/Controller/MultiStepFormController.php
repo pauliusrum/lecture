@@ -55,12 +55,12 @@ class MultiStepFormController extends AbstractController
             }
 
             return $this->render('step1.html.twig');
-        } else {
-            $response = $this->redirect($this->generateUrl('app_multistepform_step2'));
-            $response->headers->setCookie(new Cookie('multi-step', serialize($form), 0, '/', null, false, false));
-
-            return $response;
         }
+
+        $response = $this->redirect($this->generateUrl('app_multistepform_step2'));
+        $response->headers->setCookie(new Cookie('multi-step', serialize($form), 0, '/', null, false, false));
+
+        return $response;
     }
 
     /**
